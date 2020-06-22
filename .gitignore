@@ -1,5 +1,0 @@
-Procfile
-env
-.vscode
-TEST_Usrs.db
-__pycache__
