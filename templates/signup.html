@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/signin.css') }}">
+<title>Sign in page</title>
+
+{% endblock head %}
+
+
+{% block body %}
+    
+    
+<div class="container">  
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% else %}
+        {% endif %}
+
+    {% endwith %}
+    <form method="POST" action="/signup/submit">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="lastName">Nom de Famille</label>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Nom de Famille..." name="LastName" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="firstName">Prenom</label>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="Prenom..." name="FirstName" required>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputState">Sexe</label>
+            <select id="inputGender" class="form-control" name="gender" required>
+                <option selected>Choisir...</option>
+                <option>Homme</option>
+                <option>Femme</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" name="email" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Mot de passe</label>
+                <input type="password" class="form-control" id="inputPassword4" name="password" required>
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="inputPhoneNumber">Telephone</label>
+            <input type="text" class="form-control" id="inputPhoneNumber" name="phone" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="inputCIN">CIN</label>
+            <input type="text" class="form-control" id="inputCIN" name="cin" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+</div>
+
+
+{% endblock body %}
