@@ -7,7 +7,11 @@
 {% endblock head %}
 
 {% block body %}
+
 <section class="jumbotron text-center">
+
+{% if not current_user.is_authenticated %}
+
     <div class="container">
         <h1 class="jumbotron-heading">Bienveunue au "TIKHSA"</h1>
         <p class="lead text-muted">Avec ce site web vous pouvez controler toutes vos differents consommations .</p>
@@ -19,6 +23,9 @@
             <a href="/signup" class="btn btn-secondary my-2">Sign up</a>
         </p>
     </div>
+
+{% endif %}
+    
 </section>
 
 
