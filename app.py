@@ -34,6 +34,10 @@ class User_data(UserMixin, db.Model):
     def __repr__(self):
         return '{<Firstname %r>, <LastName %r>, <Sexe %r>, <Email %r>, <Password %r>, <CIN %r>, <PHONE %r>}' % (self.FirstName, self.LastName, self.Sexe, self.Email, self.Password, self.CIN, self.Phone_Number)
 
+
+# class Facture(UserMixin, db.Model):
+
+
 ########
 
 @login_manager.user_loader
@@ -95,6 +99,9 @@ def signup():
 
         return redirect(url_for('login'))
     
+    if request.method == 'GET' and current_user.is_authenticated:
+        return redirect('home')
+
     else:
         return render_template('signup.html')
 
@@ -115,6 +122,9 @@ def login():
         login_user(Checkuser)
         return redirect(url_for('profile'))
     
+    if request.method == 'GET' and current_user.is_authenticated:
+        return redirect('profile')
+
     else:
         return render_template('login.html')
 

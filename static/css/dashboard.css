@@ -67,7 +67,46 @@ body {
     font-size: .75rem;
     text-transform: uppercase;
   }
-  
+
+  /*
+  profile
+  */
+
+  button.ytd-topbar-menu-button-renderer {
+    background: none;
+    border: none;
+    outline: none;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+}
+
+  yt-img-shadow.ytd-topbar-menu-button-renderer {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    margin: 0 8px;
+    border-radius: 50%;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+img.yt-img-shadow {
+  display: block;
+  margin-left: var(--yt-img-margin-left, auto);
+  margin-right: var(--yt-img-margin-right, auto);
+  max-height: var(--yt-img-max-height, none);
+  max-width: var(--yt-img-max-width, 100%);
+  border-radius: var(--yt-img-border-radius, none);
+}
+
+
   /*
    * Navbar
    */
