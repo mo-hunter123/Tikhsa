@@ -2,14 +2,20 @@ from flask import Flask, redirect, url_for, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user, UserMixin, LoginManager, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 
 
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userDa.db'
+# app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userDa.db'
+
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
 
 db = SQLAlchemy(app)
 
@@ -100,7 +106,7 @@ def signup():
         return redirect(url_for('login'))
     
     if request.method == 'GET' and current_user.is_authenticated:
-        return redirect('home')
+        return redirect('/')
 
     else:
         return render_template('signup.html')
