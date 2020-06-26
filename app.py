@@ -28,6 +28,8 @@ login_manager.init_app(app)
 
 
 class User_data(UserMixin, db.Model):
+
+
     id = db.Column(db.Integer, primary_key=True)
     FirstName = db.Column(db.String(80), nullable=False)
     LastName = db.Column(db.String(80), nullable=False)
@@ -53,6 +55,7 @@ def load_user(user_id):
 ####### main
 
 @app.route('/')
+@app.route('/home')
 def home():
     return render_template('home.html')
 
