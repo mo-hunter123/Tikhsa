@@ -1,5 +1,3 @@
-Procfile
-env
 .vscode
 userDa.db
 __pycache__
