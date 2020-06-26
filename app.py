@@ -35,7 +35,7 @@ class User_data(UserMixin, db.Model):
     LastName = db.Column(db.String(80), nullable=False)
     Sexe = db.Column(db.String(18), nullable=False)
     Email = db.Column(db.String(120), unique=True, nullable=False)
-    Password = db.Column(db.String(18), unique=True, nullable=False)
+    Password = db.Column(db.String(200), unique=True, nullable=False)
     CIN = db.Column(db.String(18), unique=True, nullable=False)
     Phone_Number = db.Column(db.String(18), unique=True, nullable=False)
 
