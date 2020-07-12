@@ -259,18 +259,16 @@ def addrelev():
                 users = db.session.query(Person).all()
                 compteurs = db.session.query(Compteurinfo).all()
                 return redirect('showrelev/'+str(rel.id))
+            
+            else:
+                flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
+                return redirect('addrelev')
         
         else:
             rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
             db.session.add(rel)
             db.session.commit()
             return redirect('showrelev/'+str(rel.id))
-            
-        if not a:
-            flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
-            return redirect('addrelev')
-
-        
     else:
         compteurs = db.session.query(Compteurinfo).all()
         if compteurs:
