@@ -8,25 +8,39 @@
 
 {% block body %}
 
-<section class="jumbotron text-center">
+
 
 {% if not current_user.is_authenticated %}
+<section class="jumbotron text-center">
 
     <div class="container">
         <h1 class="jumbotron-heading">Bienveunue au "TIKHSA"</h1>
-        <p class="lead text-muted">Avec ce site web vous pouvez controler toutes vos differents consommations .</p>
+        <p class="lead text-muted">ACCÉDEZ si vous etes un ADMIN</p>
         <p>
             <h6 class="jumbotron-heading">
-                ACCÉDEZ DÈS MAINTENANT À VOTRE ESPACE CLIENT  
+                ACCÉDEZ DÈS MAINTENANT À VOTRE ESPACE ADMIN
             </h6>
             <a href="/login" class="btn btn-primary my-2">Login</a>
-            <a href="/signup" class="btn btn-secondary my-2">Sign up</a>
         </p>
     </div>
+</section>
+
+{% else %}
+
+<div class="card mb-4 box-shadow">
+    <div class="card-header">
+    <h4 class="my-0 font-weight-normal">welcome admin ++ {{ a.Username }} ++</h4>
+    </div>
+    <div class="card-body">
+        <a href="{{ url_for('adminpannel') }}"><button type="button" class="btn btn-lg btn-block btn-primary">ACCÉDEZ a VOTRE ESPACE ADMIN</button></a>
+    </div>
+</div>
+
+
 
 {% endif %}
     
-</section>
+
 
 
 {% endblock body %}

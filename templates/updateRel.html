@@ -1,0 +1,16 @@
+{% extends "dashboard.html" %}
+
+{% block body %}
+
+<form method="POST" action="#">
+    
+    <div class="form-group">
+        <label for="Consommation">update Consommation</label>
+        <input name="consommation" type="text" class="form-control" id="ConsommationCompteur" value="{{ a1.consommationActuelle }}">
+    </div>
+
+    
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+{% endblock body %}

@@ -1,0 +1,77 @@
+{% extends "dashboard.html" %}
+
+{% block body %}
+<div class="container">
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% else %}
+    {% endif %}
+
+{% endwith %}
+
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>id compteur</th>
+            <th>numero compteur</th>
+            <th>Client</th>
+            <th>Consommation Precedente</th>
+            <th>Consommation Actuelle</th>
+            <th>indication</th>
+            <th>facture</th>
+            <th>update</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    {% for re in releveDet %}
+
+    <tr>
+        <td>{{ re.compteur_id }}</td>
+        <td>{{ compteurs[re.compteur_id - 1].Code_Compteur }}</td>
+        <td>{{ users[compteurs[re.compteur_id - 1].person_id - 1].LastName }}</td>
+        <td>{{ re.consommationPrecedente }}</td>
+        <td>{{ re.consommationActuelle }}</td>
+        <td>{{ re.commentaire }}</td>
+        <td><a href="/showrelev/{{ re.rel_id }}/facture/{{ re.compteur_id }}">Go..</a></td>
+        <td><a href="/showrelev/{{ re.rel_id }}/update/{{ re.compteur_id }}">Go..</a></td>
+    </tr>
+
+    {% endfor %}
+        
+    </tbody>
+</table>
+
+<form method="POST" action="{{ url_for('showrelev', id = releve.id) }}">
+    <input id="rel_id" name="rel_id" type="hidden" class="form-control" value="{{ releve.id }}">
+    <div class="form-group">
+        <label for="SelectCompteur">Selectionner le compteur</label>
+        <select name="compteur_id" class="form-control" id="SelectCompteur">
+        {% for compteur in compteurs %}
+            <option value="{{ compteur.id }}">{{ compteur.Code_Compteur }} ({{ users[compteur.person_id - 1].LastName }})</option>
+        {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ConsommationCompteur">Consommation</label>
+        <input name="consommation" type="number" class="form-control" id="ConsommationCompteur" placeholder="consommation en m(cube)">
+    </div>
+
+    <div class="form-group">
+        <label for="CommentaireCompteur">Indication pour la consommation</label>
+        <textarea name="comment" class="form-control" id="CommentaireCompteur" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Sign in</button>
+</form>
+
+</div>
+
+
+
+{% endblock body %}

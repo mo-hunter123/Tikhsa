@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "dashboard.html" %}
 
 {% block head %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename = 'css/signin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/signup.css') }}">
 <title>Sign in page</title>
 
 {% endblock head %}
@@ -24,7 +24,8 @@
         {% endif %}
 
     {% endwith %}
-    <form method="POST" action="/signup">
+    
+    <form method="POST" action="/signup" style="margin-top:3em;">
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="lastName">Nom de Famille</label>
@@ -43,24 +44,42 @@
                 <option>Femme</option>
             </select>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" name="email" required>
-            </div>
-            <div class="form-group col-md-6">
-                <label for="inputPassword4">Mot de passe</label>
-                <input type="password" class="form-control" id="inputPassword4" name="password" required>
-            </div>
+        <div class="form-group col-md-6">
+            <label for="inputEmail4">Email</label>
+            <input type="email" class="form-control" id="inputEmail4" name="email" required>
         </div>
+        <div class="form-group col-md-3">
+            <label for="inputPassword4">Mot de passe</label>
+            <input type="password" class="form-control" id="inputPassword4" name="password" required>
+        </div>
+        
         <div class="form-group col-md-2">
             <label for="inputPhoneNumber">Telephone</label>
             <input type="text" class="form-control" id="inputPhoneNumber" name="phone" required>
         </div>
         <div class="form-group col-md-2">
-            <label for="inputCIN">CIN</label>
-            <input type="text" class="form-control" id="inputCIN" name="cin" required>
+            <label for="inputCODE">CODE (User login)</label>
+            <input type="text" class="form-control" id="inputCODE" name="code" required>
         </div>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Statut du client</legend>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="1" checked>
+                    <label class="form-check-label" for="gridRadios1">
+                        Appartient a l'Association
+                    </label>
+                    </div>
+                    <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="2">
+                    <label class="form-check-label" for="gridRadios2">
+                        Non Appartient a l'Association
+                    </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
 
         <button type="submit" class="btn btn-primary">Sign in</button>
     </form>

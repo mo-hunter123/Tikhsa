@@ -1,0 +1,44 @@
+{% extends "dashboard.html" %}
+
+{% block body %}
+
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Releve Par  M. {{current_user.Username}}</h1>
+</div>
+
+<div class="container">
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% else %}
+    {% endif %}
+
+{% endwith %}
+
+<form method="POST" action="/addrelev" style="margin-top:3em;" id="initForm">
+    
+    <div class="form-group">
+        <label for="Relevetitle">Indication pour le Releve</label>
+        <input name="titlerel" type="text" class="form-control" id="relTitle" placeholder="Titre ...">
+    </div>
+    
+    <div class="form-group">
+        <label for="NombreMois">Nombre de Mois par rapport au dernier Releve</label>
+        <input name="NombreMois" type="number" class="form-control" id="NombreMois" placeholder="Nombre de Mois ..." required>
+    </div>
+
+<button type="submit" class="btn btn-primary initRelev">Submit</button>
+</form> 
+</div>   
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+
+{% endblock body %}

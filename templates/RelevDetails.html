@@ -1,0 +1,70 @@
+{% extends "dashboard.html" %}
+
+{% block body %}
+
+<div class="container">
+
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger" role="alert" style="margin-top: 3em;">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% else %}
+        {% endif %}
+
+    {% endwith %}
+
+<table class="table table-striped table-sm" id = "relDetails">
+    <thead>
+        <th>nom utilisateur</th>
+        <th>Code compteur</th>
+        <th>consommation en m (cube)</th>
+        <th>commentaire</th>
+    </thead>
+    <tbody>
+    {% for compteur in compteurs %}
+    <input id="rel_id" name="rel_id" type="hidden" class="form-control" value="{{ rel_id }}">
+        <tr>
+            <td><a href="adminpannel/user{{ compteur.person_id }}">{{ users[compteur.person_id-1].LastName }}</a></td>
+            <div id="memberSection{{ compteur.id }}" class="panel panel-default">
+                <td>
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Compteur: <span id="memberNumber{{ compteur.id }}">{{ compteur.id }}</span> </h3>
+                    </div>
+                </td>
+                    
+                <div class="panel-body">
+                    <div class="form-inline" id="Changeable{{ compteur.id }}">
+                        <td>
+                        <div class="form-group">
+                            <input name="consommation" type="number" class="form-control" id="ReleveConsommation{{ compteur.id }}" placeholder="Consommation en m (cube)">
+                        </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <textarea name="comment" class="form-control" id="CommentFormTextarea{{ compteur.id }}" rows="3"></textarea>
+                            </div>
+                            <input name="compteur_id" type="hidden" class="form-control" value="{{ compteur.id }}">
+                            <button type="submit" class="btn btn-primary addButton" compteur_id = "{{ compteur.id }}">Submit</button>
+
+                        </td>
+                    </div>
+                </div>
+            </div>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+</div>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script src = "{{ url_for('static', filename='js/app3.js') }}"></script>
+
+
+{% endblock body %}
