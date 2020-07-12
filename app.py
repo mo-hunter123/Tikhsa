@@ -246,21 +246,29 @@ def addrelev():
 
         a = db.session.query(Compteurinfo).all()
         b = db.session.query(RelevesCompteur).all()
+        
+        if b:   
+            ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
 
-        ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
+            if len(ii) == len(a):
+                rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
 
-        if len(ii) == len(a):
+                db.session.add(rel)
+                db.session.commit()
+
+                users = db.session.query(Person).all()
+                compteurs = db.session.query(Compteurinfo).all()
+                return redirect('showrelev/'+str(rel.id))
+        
+        else:
             rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
-
             db.session.add(rel)
             db.session.commit()
-            
-            users = db.session.query(Person).all()
-            compteurs = db.session.query(Compteurinfo).all()
             return redirect('showrelev/'+str(rel.id))
-
-        flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
-        return redirect('addrelev')
+            
+        if not a:
+            flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
+            return redirect('addrelev')
 
         
     else:
