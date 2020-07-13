@@ -10,11 +10,11 @@ from sqlalchemy.dialects.postgresql import JSON
 
 app = Flask(__name__)
 
-# app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///updated.db'
+app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///updated.db'
 
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
@@ -293,33 +293,11 @@ def addrelev():
             rel_Mois = 1
             rel = RelevesCompteur(admin_id = current_user.id, DatePrecedente = datetime.datetime(2018, 5, 1), DateActuelle = x, indicationReleve = rel_title, NombreMois = rel_Mois)
 
-        a = db.session.query(Compteurinfo).all()
-        b = db.session.query(RelevesCompteur).all()
-        
-        if b:   
-            ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
-
-            if len(ii) == len(a):
-                rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
-
-                db.session.add(rel)
-                db.session.commit()
-
-                users = db.session.query(Person).all()
-                compteurs = db.session.query(Compteurinfo).all()
-                return redirect('showrelev/'+str(rel.id))
-            
-            else:
-                flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
-                return redirect('addrelev')
-        
-        else:
-            rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
             db.session.add(rel)
             db.session.commit()
             return redirect('showrelev/'+str(rel.id))
 
-
+        
     else:
         compteurs = db.session.query(Compteurinfo).all()
         if compteurs:
@@ -427,7 +405,7 @@ def showrelev(id):
         compteurs = db.session.query(Compteurinfo).all()
         users = db.session.query(Person).all()
         factures = Factures.query.filter_by(rel_id = id).all()
-        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factures)
+        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factues)
 
 @app.route('/showrelev/<int:idrel>/facture/<int:idcompteur>', methods=['POST', 'GET'])
 @login_required
@@ -498,4 +476,4 @@ def logout():
 ######
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
