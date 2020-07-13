@@ -10,11 +10,11 @@ from sqlalchemy.dialects.postgresql import JSON
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///updated.db'
+# app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///updated.db'
 
-# app.config.from_object(os.environ['APP_SETTINGS'])
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
@@ -503,4 +503,4 @@ def logout():
 ######
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
