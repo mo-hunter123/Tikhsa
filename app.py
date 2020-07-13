@@ -252,6 +252,7 @@ def addrelev():
 
         rel_title = request.form['titlerel']
 
+<<<<<<< HEAD
         try:
             x = datetime.datetime(int(an), int(m), int(j))
 
@@ -292,12 +293,38 @@ def addrelev():
         else:
             rel_Mois = 1
             rel = RelevesCompteur(admin_id = current_user.id, DatePrecedente = datetime.datetime(2018, 5, 1), DateActuelle = x, indicationReleve = rel_title, NombreMois = rel_Mois)
+=======
+        a = db.session.query(Compteurinfo).all()
+        b = db.session.query(RelevesCompteur).all()
+        
+        if b:   
+            ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
 
+            if len(ii) == len(a):
+                rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
+
+                db.session.add(rel)
+                db.session.commit()
+>>>>>>> 87a45e0528955edef7e633854d0a5b0e4379300b
+
+                users = db.session.query(Person).all()
+                compteurs = db.session.query(Compteurinfo).all()
+                return redirect('showrelev/'+str(rel.id))
+            
+            else:
+                flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
+                return redirect('addrelev')
+        
+        else:
+            rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
             db.session.add(rel)
             db.session.commit()
             return redirect('showrelev/'+str(rel.id))
+<<<<<<< HEAD
 
         
+=======
+>>>>>>> 87a45e0528955edef7e633854d0a5b0e4379300b
     else:
         compteurs = db.session.query(Compteurinfo).all()
         if compteurs:
