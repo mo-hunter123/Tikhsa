@@ -3,18 +3,18 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import login_required, current_user, UserMixin, LoginManager, login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+import datetime
 import os
 from sqlalchemy.dialects.postgresql import JSON
 
 
 app = Flask(__name__)
 
-# app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///updated.db'
+app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///updated.db'
 
-app.config.from_object(os.environ['APP_SETTINGS'])
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
@@ -49,6 +49,7 @@ class admin(UserMixin, db.Model):
     Username = db.Column(db.String(80), nullable=False)
     PassW = db.Column(db.String(200), nullable=False)
     releves = db.relationship('RelevesCompteur', backref='admin', lazy=True)
+    Compteurs = db.relationship('Compteurinfo', backref='admin', lazy=True)
 
     def __repr__(self):
         return 'Admin : %r ' % self.Username
@@ -65,7 +66,7 @@ class Person(UserMixin, db.Model):
     Password = db.Column(db.String(200), unique=True, nullable=False)
     CIN = db.Column(db.String(18), unique=True, nullable=False)
     Phone_Number = db.Column(db.String(18), unique=True, nullable=False)
-    Date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    Date_created = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
     Compteurs = db.relationship('Compteurinfo', backref='person', lazy=True)
 
     def __repr__(self):
@@ -78,6 +79,9 @@ class Compteurinfo(db.Model):
     Code_Compteur = db.Column(db.Integer, nullable = False, unique = True)
     #owner de compteur
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
+    DateInstallation = db.Column(db.DateTime, nullable = False)
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
+    Date_created = db.Column(db.DateTime, nullable = False, default = datetime.datetime.utcnow)
     relcompteurs = db.relationship('RelevesCompteurDetails', backref='compteur', lazy=True)
     factures = db.relationship('Factures', backref='compteur', lazy=True)
 
@@ -88,7 +92,9 @@ class RelevesCompteur(db.Model):
     __tablename__ = 'relevescompteur'
 
     id = db.Column(db.Integer, primary_key=True)
-    Date_rel = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    DateSaisie = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
+    DateActuelle = db.Column(db.DateTime, nullable=False)
+    DatePrecedente = db.Column(db.DateTime, nullable=False)
     NombreMois = db.Column(db.Integer, nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
     indicationReleve = db.Column(db.String(80), default='test it')
@@ -117,8 +123,9 @@ class Factures(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rel_id = db.Column(db.Integer, db.ForeignKey('relevescompteur.id'))
 
-    Date_facture = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    Date_facture = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
     Montant_facture = db.Column(db.Integer, nullable=False)
+    generated = db.Column(db.Boolean, nullable = False, default = False)
     compteur_id = db.Column(db.Integer, db.ForeignKey('compteurinfo.id'))
 
     def __repr__(self):
@@ -131,14 +138,10 @@ def load_user(admin_id):
     return admin.query.get(int(admin_id))
 
 ####### main
-
-
 def deleteRel(id):
     RelevesCompteurDetails.query.filter_by(rel_id = id).delete()
     RelevesCompteur.query.filter_by(id = id).delete()
     db.session.commit()
-
-    
 
 @app.route('/')
 @app.route('/home')
@@ -240,27 +243,59 @@ def userProfile(id):
 @login_required
 def addrelev():
     if request.method == 'POST':
-        
-        rel_Mois = request.form['NombreMois']
-        rel_title = request.form['titlerel']
-
         a = db.session.query(Compteurinfo).all()
         b = db.session.query(RelevesCompteur).all()
+        
+        j = request.form['jour']
+        m = request.form['mois']
+        an = request.form['annee']
 
-        ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
+        rel_title = request.form['titlerel']
 
-        if len(ii) == len(a):
-            rel = RelevesCompteur(admin_id = current_user.id, indicationReleve = rel_title, NombreMois = rel_Mois)
+        try:
+            x = datetime.datetime(int(an), int(m), int(j))
+
+        except ValueError:
+
+            flash('certainne de vos valeurs est fausse')
+            return redirect('addrelev')
+
+        if b:
+            ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
+
+            y = RelevesCompteur.query.filter_by(id = b[len(b) - 2].id).first()
+
+            if len(ii) == len(a):
+                if y.DateActuelle >= x:
+
+                    flash('verifier votre Date de Saisie')
+                    return redirect('addrelev')
+
+                d = x - y.DateActuelle
+                rel_Mois = int(d.days/30)
+
+                if rel_Mois < 1:
+                    flash('la duree entre les releves faut etre superieur a un mois')
+                    return redirect('addrelev')
+
+                rel = RelevesCompteur(admin_id = current_user.id, DatePrecedente = y.DateActuelle, DateActuelle = x, indicationReleve = rel_title, NombreMois = rel_Mois)
+
+                db.session.add(rel)
+                db.session.commit()
+                
+                return redirect('showrelev/'+str(rel.id))
+            
+            else:
+                flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
+                return redirect('addrelev')
+
+        else:
+            rel_Mois = 1
+            rel = RelevesCompteur(admin_id = current_user.id, DatePrecedente = datetime.datetime(2018, 5, 1), DateActuelle = x, indicationReleve = rel_title, NombreMois = rel_Mois)
 
             db.session.add(rel)
             db.session.commit()
-            
-            users = db.session.query(Person).all()
-            compteurs = db.session.query(Compteurinfo).all()
             return redirect('showrelev/'+str(rel.id))
-
-        flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
-        return redirect('addrelev')
 
         
     else:
@@ -280,6 +315,19 @@ def addcompteur():
         co_co = request.form['code']
         id_pe = request.form['idPerson']
 
+        j = request.form['jour']
+        m = request.form['mois']
+        a = request.form['annee']
+
+        try:
+            x = datetime.datetime(int(a), int(m), int(j))
+
+        except ValueError:
+            flash('certainne de vos valeurs est fausse')
+            return redirect('addcompteur')
+        
+        
+
         check = Compteurinfo.query.filter_by(Code_Compteur = co_co).first()
             
         if check:
@@ -290,7 +338,7 @@ def addcompteur():
             flash('un des champs est vide')
             return redirect(url_for('addcompteur'))
 
-        compteur = Compteurinfo(Code_Compteur = co_co, person_id = id_pe)
+        compteur = Compteurinfo(Code_Compteur = co_co, person_id = id_pe, DateInstallation = x, admin_id = current_user.id)
         db.session.add(compteur)
         db.session.commit()
         flash('le compteur bien ajoute')
@@ -356,31 +404,61 @@ def showrelev(id):
         releveDet = RelevesCompteurDetails.query.filter_by(rel_id = id).all()
         compteurs = db.session.query(Compteurinfo).all()
         users = db.session.query(Person).all()
-        
-        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users)
+        factures = Factures.query.filter_by(rel_id = id).all()
+        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factures)
 
-@app.route('/showrelev/<int:idrel>/facture/<int:idcompteur>')
+@app.route('/showrelev/<int:idrel>/facture/<int:idcompteur>', methods=['POST', 'GET'])
 @login_required
 def factureid(idrel, idcompteur):
-    a1 = RelevesCompteurDetails.query.filter_by(rel_id = idrel).all()
+    if request.method == 'POST':
 
-    a2 = RelevesCompteur.query.filter_by(id = idrel).first()
+        a = db.session.query(Compteurinfo).all()
+        b = db.session.query(RelevesCompteur).all()
 
-    montant1 = (a1[idcompteur-1].consommationActuelle - a1[idcompteur-1].consommationPrecedente)*5
-    montant2 = a2.NombreMois * 10
+        if b:
+            ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
 
-    Tot = max(montant1, montant2)
+            if len(ii) == len(a):
+                a1 = RelevesCompteurDetails.query.filter_by(rel_id = idrel).all()
 
-    return render_template('facture.html', Tot = Tot)
-    
+                a2 = RelevesCompteur.query.filter_by(id = idrel).first()
+
+                montant1 = (a1[idcompteur-1].consommationActuelle - a1[idcompteur-1].consommationPrecedente)*5
+                montant2 = a2.NombreMois * 10
+
+                Tot = max(montant1, montant2)
+
+                fac = Factures(rel_id = idrel, Montant_facture = Tot, compteur_id = idcompteur, generated = True)
+
+                db.session.add(fac)
+                db.session.commit()
+                
+                return redirect(url_for('factureid', idrel = idrel, idcompteur = idcompteur))
+            
+            else:
+                flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')
+                return redirect(url_for('showrelev', id = idrel))
+
+    else:
+        d = Factures.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
+        return render_template('facture.html', d = d)
+
+
 
 @app.route('/showrelev/<int:idrel>/update/<int:idcompteur>', methods=['POST', 'GET'])
 @login_required
 def updateid(idrel, idcompteur):
     if request.method == 'POST':
-        a = RelevesCompteurDetails.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
-        a.consommationActuelle = request.form['consommation']
-        db.session.commit()
+        d = Factures.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
+
+        if d.generated:
+            flash('la facture de ce releve existe deja alors vous ne pouvez pas mis a jour les donnees')
+            return redirect(url_for('showrelev', id = idrel))
+
+        else:
+            a = RelevesCompteurDetails.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
+            a.consommationActuelle = request.form['consommation']
+            db.session.commit()
 
         return redirect(url_for('showrelev', id = idrel))
         
@@ -398,4 +476,4 @@ def logout():
 ######
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

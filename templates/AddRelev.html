@@ -34,11 +34,16 @@
     </div>
     
     <div class="form-group">
-        <label for="NombreMois">Nombre de Mois par rapport au dernier Releve</label>
-        <input name="NombreMois" type="number" class="form-control" id="NombreMois" placeholder="Nombre de Mois ..." required>
+        <label for="NombreMois">la date de Releve</label><br>
+        <label for="DateRelJ">jour : </label>
+        <input name="jour" type="number" class="form-control" id="DateRelJ" required>
+        <label for="DateRelM">mois : </label>
+        <input name="mois" type="number" class="form-control" id="DateRelM" required>
+        <label for="DateRelA">annee : </label>
+        <input name="annee" type="number" class="form-control" id="DateRelY" required>
     </div>
 
-<button type="submit" class="btn btn-primary initRelev">Submit</button>
+<button type="submit" class="btn btn-primary initRelev">Ajouter</button>
 </form> 
 </div>   
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

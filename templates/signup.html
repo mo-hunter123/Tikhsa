@@ -11,7 +11,7 @@
 {% block body %}
     
     
-<div class="container">  
+<div class="container" style="margin-top:3em;">  
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -25,7 +25,7 @@
 
     {% endwith %}
     
-    <form method="POST" action="/signup" style="margin-top:3em;">
+    <form method="POST" action="/signup">
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="lastName">Nom de Famille</label>
@@ -81,7 +81,7 @@
             </div>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
     </form>
 </div>
 

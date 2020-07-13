@@ -35,6 +35,7 @@
         <table class="table table-striped table-sm">
             <thead>
                 <th>id de compteur</th>
+                <th>admin</th>
                 <th>code compteur</th>
                 <th>owner</th>
             </thead>
@@ -43,6 +44,7 @@
             {% for compteur in compteurs %}
                 <tr>
                     <td>{{ compteur.id }}</a></td>
+                    <td>{{ compteur.admin_id }}</a></td>
                     <td>{{ compteur.Code_Compteur }}</td>
                     <td>{{ users[compteur.person_id - 1].FirstName }} {{ users[compteur.person_id - 1].LastName }}</td>
                 </tr>
@@ -73,6 +75,7 @@
             </tbody>
         </table>
     </div>
+
     <h2>liste des Releves</h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
@@ -80,8 +83,10 @@
             <thead>
                 <th>id de releve</th>
                 <th>admin qui fait le releve </th>
-                <th>Date de Releve</th>
-                <th>Nombre de mois par rapport au dernier releve</th>
+                <th>Date de Saisie</th>
+                <th>Date Precedente</th>
+                <th>Date Actuelle</th>
+                <th>periode(DateFin - DateDeb)</th>
             </thead>
             <tbody>
             
@@ -89,7 +94,9 @@
                 <tr>
                     <td><a href="showrelev/{{ releve.id }}">{{ releve.id }}</a></td>
                     <td>{{ releve.admin_id }}</td>
-                    <td>{{ releve.Date_rel }}</td>
+                    <td>{{ releve.DateSaisie }}</td>
+                    <td>{{ releve.DatePrecedente }}</td>
+                    <td>{{ releve.DateActuelle }}</td>
                     <td>{{ releve.NombreMois }}</td>
                 </tr>
             {% endfor %}
