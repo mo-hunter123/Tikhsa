@@ -405,7 +405,7 @@ def showrelev(id):
         compteurs = db.session.query(Compteurinfo).all()
         users = db.session.query(Person).all()
         factures = Factures.query.filter_by(rel_id = id).all()
-        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factues)
+        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factures)
 
 @app.route('/showrelev/<int:idrel>/facture/<int:idcompteur>', methods=['POST', 'GET'])
 @login_required
