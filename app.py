@@ -159,7 +159,7 @@ def adminpannel():
     relevesDet = db.session.query(RelevesCompteurDetails).all()
 
     
-    return render_template('AdminPannel.html', releves = releves, relevesDet = relevesDet, users = users[::-1], compteurs = compteurs)
+    return render_template('AdminPannel.html', releves = releves, relevesDet = relevesDet, users = users, compteurs = compteurs)
 
 ########person_id = 1, consommatperson_id = 1, consommation=reqion=req
 
