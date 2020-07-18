@@ -139,9 +139,10 @@ def load_user(admin_id):
 
 ####### main
 def deleteRel(id):
+    Factures.query.filter_by(rel_id = id).delete()
     RelevesCompteurDetails.query.filter_by(rel_id = id).delete()
     RelevesCompteur.query.filter_by(id = id).delete()
-    Factures.query.filter_by(rel_id = id).delete()
+    
     db.session.commit()
 
 @app.route('/deleteid/<int:relid>')
