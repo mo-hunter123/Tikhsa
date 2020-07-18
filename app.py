@@ -102,7 +102,7 @@ class RelevesCompteur(db.Model):
     factures = db.relationship('Factures', backref='releve')
 
     def __repr__(self):
-        return '<%r - %r - %r - %r - %r>' % (self.id, self.Date_rel, self.NombreMois, self.admin_id, self.indicationReleve)
+        return '<%r - %r - %r - %r>' % (self.id, self.NombreMois, self.admin_id, self.indicationReleve)
 
 class RelevesCompteurDetails(db.Model):
     __tablename__ = 'relevescompteurdetails'
@@ -129,7 +129,7 @@ class Factures(db.Model):
     compteur_id = db.Column(db.Integer, db.ForeignKey('compteurinfo.id'))
 
     def __repr__(self):
-        return '<%r - %r - %r>' % (self.rel_id, self.Date_facture, self.Montant_facture)
+        return '<%r - %r - %r - %r>' % (self.rel_id, self.Montant_facture, self.generated, self.compteur_id)
 
 ########
 
@@ -457,8 +457,13 @@ def factureid(idrel, idcompteur):
                 return redirect(url_for('showrelev', id = idrel))
 
     else:
-        d = Factures.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
-        return render_template('facture.html', d = d)
+        f = Factures.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
+        r = RelevesCompteurDetails.query.filter_by(rel_id = idrel, compteur_id = idcompteur).first()
+        c = Compteurinfo.query.filter_by(id = idcompteur).first()
+        i = RelevesCompteur.query.filter_by(id = idrel).first()
+        p = Person.query.filter_by(id = c.person_id).first()
+
+        return render_template('facture.html', f = f, i = i, r = r, c = c, p = p, datetime = datetime)
 
 
 

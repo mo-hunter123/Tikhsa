@@ -1,9 +1,60 @@
 
-{% extends "base.html" %}
-
-
-
-{% block body %}
-Total de facture : {{ d.Montant_facture }}Dh
-{% endblock body %}
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Facture</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/facture.css') }}" media="all" />
+  </head>
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+        <img src="logo.png">
+      </div>
+      <h1>Facture d'eau potable</h1>
+      <div id="company" class="clearfix">
+        <div>Association Tikhssa</div>
+        <div>Douar Tighmert<br /></div>
+        <div><a href="mailto:company@example.com">company@example.com</a></div>
+      </div>
+      <div id="project">
+        <div><span>SERVICE</span> Consommation Eau</div>
+        <div><span>CLIENT</span> {{ p.FirstName }} {{ p.LastName }}</div>
+        <div><span>COMPTEUR</span> {{ c.Code_Compteur }}</div>
+        <div><span>ADDRESS</span> Douar Tighmert</div>
+        <div><span>EMAIL</span> <a href="{{ p.Email }}">{{ p.Email }}</a></div>
+        <div><span>DATE</span> {{ datetime.date.isoformat(f.Date_facture) }}</div>
+      </div>
+    </header>
+    <main>
+      <table>
+        <tbody>
+          <tr>
+            <td class="service">Periode</td>
+            <td class="desc">{{ i.NombreMois }} mois</td>
+          </tr>
+          <tr>
+            <td class="service">Consommation de Mois Precedent</td>
+            <td class="desc">{{ r.consommationPrecedente }} m (au cube)</td>
+          </tr>
+          <tr>
+            <td class="service">Consommation de Mois actuelle</td>
+            <td class="desc">{{ r.consommationActuelle }} m (au cube)</td>
+          </tr>
+          <tr>
+            <td class="service" style="font-size: 20px;"><strong>Total a regler</strong></td>
+            <td class="desc" style="font-size: 20px;"><strong>{{ f.Montant_facture }} DH </strong></td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div id="notices">
+        <div>Messages:</div>
+        <div class="notice">Test.</div>
+      </div>
+    </main>
+    <footer>
+      Association Tikhssa : Douar Tighmert -- service d'eau potable
+    </footer>
+  </body>
+</html>
