@@ -87,6 +87,7 @@
                 <th>Date Precedente</th>
                 <th>Date Actuelle</th>
                 <th>periode(DateFin - DateDeb)</th>
+                <th>delete Releve</th>
             </thead>
             <tbody>
             
@@ -94,10 +95,11 @@
                 <tr>
                     <td><a href="showrelev/{{ releve.id }}">{{ releve.id }}</a></td>
                     <td>{{ releve.admin_id }}</td>
-                    <td>{{ releve.DateSaisie }}</td>
-                    <td>{{ releve.DatePrecedente }}</td>
-                    <td>{{ releve.DateActuelle }}</td>
+                    <td>{{ datetime.date.isoformat(releve.DateSaisie) }}</td>
+                    <td>{{ datetime.date.isoformat(releve.DatePrecedente) }}</td>
+                    <td>{{ datetime.date.isoformat(releve.DateActuelle) }}</td>
                     <td>{{ releve.NombreMois }}</td>
+                    <td><a href="{{ url_for('deleteid', relid = releve.id) }}">suprimmer</a></td>
                 </tr>
             {% endfor %}
             

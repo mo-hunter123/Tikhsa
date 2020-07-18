@@ -141,7 +141,22 @@ def load_user(admin_id):
 def deleteRel(id):
     RelevesCompteurDetails.query.filter_by(rel_id = id).delete()
     RelevesCompteur.query.filter_by(id = id).delete()
+    Factures.query.filter_by(rel_id = id).delete()
     db.session.commit()
+
+@app.route('/deleteid/<int:relid>')
+@login_required
+def deleteid(relid):
+    x = RelevesCompteur.query.filter_by(id = (int(relid)+1)).first()
+    if x:
+        flash('you can t delete this one')
+        return redirect(url_for('adminpannel'))
+
+
+    deleteRel(relid)
+
+    flash('Rele succefully deleted')
+    return redirect(url_for('adminpannel'))
 
 @app.route('/')
 @app.route('/home')
@@ -159,7 +174,7 @@ def adminpannel():
     relevesDet = db.session.query(RelevesCompteurDetails).all()
 
     
-    return render_template('AdminPannel.html', releves = releves, relevesDet = relevesDet, users = users, compteurs = compteurs)
+    return render_template('AdminPannel.html', releves = releves, relevesDet = relevesDet, users = users, compteurs = compteurs, datetime = datetime)
 
 ########person_id = 1, consommatperson_id = 1, consommation=reqion=req
 
@@ -169,6 +184,7 @@ def adminpannel():
 @login_required
 def signup():
     if request.method == 'POST':
+        
         
         user_FN = request.form['FirstName']
         user_LN = request.form['LastName']
@@ -193,7 +209,7 @@ def signup():
 
 
         if CheckCIN:
-            flash("le CIN deja utiliser")
+            flash("le Code deja utiliser")
             return redirect(url_for('signup'))
 
         elif CheckPHONE:
@@ -433,7 +449,7 @@ def factureid(idrel, idcompteur):
                 db.session.add(fac)
                 db.session.commit()
                 
-                return redirect(url_for('factureid', idrel = idrel, idcompteur = idcompteur))
+                return redirect(url_for('showrelev', id = idrel))
             
             else:
                 flash('il s emble comme si vous n avez pas bien remplis votre dernier releve')

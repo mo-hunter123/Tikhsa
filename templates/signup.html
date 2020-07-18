@@ -29,11 +29,11 @@
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="lastName">Nom de Famille</label>
-                <input type="text" class="form-control" id="inputLastName" placeholder="Nom de Famille..." name="LastName" required>
+                <input type="text" class="form-control" id="inputLastName" placeholder="Nom de Famille..." value="{{ fn }}" name="LastName" required>
             </div>
             <div class="form-group col-md-3">
                 <label for="firstName">Prenom</label>
-                <input type="text" class="form-control" id="inputFirstName" placeholder="Prenom..." name="FirstName" required>
+                <input type="text" class="form-control" id="inputFirstName" placeholder="Prenom..." value="{{ ln }}" name="FirstName" required>
             </div>
         </div>
         <div class="form-group col-md-4">
@@ -46,7 +46,7 @@
         </div>
         <div class="form-group col-md-6">
             <label for="inputEmail4">Email</label>
-            <input type="email" class="form-control" id="inputEmail4" name="email" required>
+            <input type="email" class="form-control" id="inputEmail4" name="email" value="{{ e }}" required>
         </div>
         <div class="form-group col-md-3">
             <label for="inputPassword4">Mot de passe</label>
@@ -55,7 +55,7 @@
         
         <div class="form-group col-md-2">
             <label for="inputPhoneNumber">Telephone</label>
-            <input type="text" class="form-control" id="inputPhoneNumber" name="phone" required>
+            <input type="text" class="form-control" id="inputPhoneNumber" value="{{ ph }}" name="phone" required>
         </div>
         <div class="form-group col-md-2">
             <label for="inputCODE">CODE (User login)</label>
