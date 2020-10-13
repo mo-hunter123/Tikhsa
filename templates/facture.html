@@ -9,7 +9,7 @@
   <body>
     <header class="clearfix">
       <div id="logo">
-        <img src="https://f0.pngfuel.com/png/620/584/black-and-white-graphic-artwork-png-clip-art.png">
+        <img src="{{ url_for('static', filename='Logo.jpg') }}">
       </div>
       <h1>Facture d'eau potable</h1>
       <div id="company" class="clearfix">
@@ -31,7 +31,7 @@
         <tbody>
           <tr>
             <td class="service">Periode</td>
-            <td class="desc">{{ i.NombreMois }} mois</td>
+            <td class="desc">{{ datetime.date.isoformat(i.DatePrecedente) }} - {{ datetime.date.isoformat(i.DateActuelle) }} : {{ (i.NombreMois) }} mois</td>
           </tr>
           <tr>
             <td class="service">Consommation de Mois Precedent</td>

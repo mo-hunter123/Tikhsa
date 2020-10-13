@@ -1,1 +1,28 @@
 {% extends "dashboard.html" %}
+
+{% block body %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">liste des Compteurs</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <th>id des factures</th>
+                    <th>compteur associe</th>
+                </thead>
+                <tbody>
+                
+                {% for facture in factures %}
+                    <tr>
+                        <td><a href="/showrelev/{{ facture.rel_id }}/facture/{{ compteur.id }}">{{ facture.id }}</a></td>
+                        <td>{{ compteur.id }}</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

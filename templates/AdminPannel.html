@@ -24,13 +24,21 @@
         <h1 class="h2">Bienvenue M. {{current_user.Username}}</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-                <a class="testa" href="{{ url_for('signup') }}"><button type="button" class="btn btn-sm btn-outline-secondary">Ajouter un utilisateur</button></a>
-                <a class="testa" href="{{ url_for('addrelev') }}"><button type="button" class="btn btn-sm btn-outline-secondary">Ajouter un Releve</button></a>
-                <a class="testa" href="{{ url_for('addcompteur') }}"><button type="button" class="btn btn-sm btn-outline-secondary">Ajouter un Compteur</button></a>
+                <a class="testa" href="{{ url_for('signup') }}"><button type="button" class="btn btn-sm btn-outline-secondary">+ <span data-feather="users"></span> un utilisateur</button></a>
+            </div>
+
+            <div class="btn-group mr-2">
+                <a class="testa" href="{{ url_for('addrelev') }}"><button type="button" class="btn btn-sm btn-outline-secondary">+ <span data-feather="layers"></span> un Releve</button></a>
+            </div>
+
+            <div class="btn-group mr-2">
+                <a class="testa" href="{{ url_for('addcompteur') }}"><button type="button" class="btn btn-sm btn-outline-secondary">+ <span data-feather="file-text"></span> un Compteur</button></a>
             </div>
         </div>
     </div>
-    <h2>liste des Compteurs</h2>
+    <div class="card">
+    <div class="card-body">
+    <h5 class="card-title">liste des Compteurs</h5>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
@@ -52,7 +60,12 @@
             </tbody>
         </table>
     </div>
-    <h2>liste des Utilisateurs</h2>
+    </div>
+    </div>
+
+    <div class="card" style="margin-top: 2em;">
+    <div class="card-body">
+    <h5 class="card-title">liste des Utilisateurs</h5>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
@@ -65,7 +78,7 @@
             <tbody>
             {% for user in users %}
                 <tr>
-                    <td><a href="adminpannel/user{{ user.id }}">{{ user.id }}</a></td>
+                    <td><a href="adminpannel/users/{{ user.id }}">{{ user.id }}</a></td>
                     <td>{{ user.CIN }}</td>
                     <td>M. {{ user.FirstName }} {{ user.LastName }}</td>
                     <td>{{ user.Phone_Number }}</td>
@@ -75,8 +88,12 @@
             </tbody>
         </table>
     </div>
+    </div>
+    </div>
 
-    <h2>liste des Releves</h2>
+    <div class="card" style="margin-top: 2em;">
+    <div class="card-body">
+    <h5 class="card-title">liste des Releves</h5>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
         {% if releves %}
@@ -110,6 +127,12 @@
             {% endif %}
             </tbody>
         </table>
+    </div>
+    
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Last updated x mins ago</small>
+    </div>
     </div>
     
 {% endblock body %}

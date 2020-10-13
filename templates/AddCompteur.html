@@ -51,25 +51,29 @@
     <button type="submit" class="btn btn-primary">Ajouter</button>
 </form>
 
-<h2>les Compteurs</h2>
-<div class="table-responsive">
-    <table class="table table-striped table-sm">
-        <thead>
-            <th>id de compteur</th>
-            <th>code compteur</th>
-            <th>owner</th>
-        </thead>
-        <tbody>
-        
-        {% for compteur in compteurs %}
-            <tr>
-                <td>{{ compteur.id }}</a></td>
-                <td>{{ compteur.Code_Compteur }}</td>
-                <td>{{ users[compteur.person_id - 1].FirstName }} {{ users[compteur.person_id - 1].LastName }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="card" style="margin-top: 2em;">
+    <div class="card-body">
+    <h5 class="card-title">liste des Compteurs</h5>
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <th>id de compteur</th>
+                    <th>code compteur</th>
+                    <th>owner</th>
+                </thead>
+                <tbody>
+                
+                {% for compteur in compteurs %}
+                    <tr>
+                        <td>{{ compteur.id }}</a></td>
+                        <td>{{ compteur.Code_Compteur }}</td>
+                        <td>{{ users[compteur.person_id - 1].FirstName }} {{ users[compteur.person_id - 1].LastName }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 {% endblock body %}

@@ -8,9 +8,20 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     {% block head %}
+
+    <!--div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown button
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+    </div-->
     
     {% endblock head %}
   </head>
@@ -20,7 +31,7 @@
       <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <!--input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"-->
+      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="{{ url_for('logout') }}">Sign out</a>
@@ -67,12 +78,36 @@
       </div>
     </div>
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mb-6">
     {% block body %}
     
     {% endblock body %}
+      <footer class="blog-footer">
+        <p>E-TIKHSSA project - <strong>Tikhssa Association</strong> - by <a href="https://github.com/mo-hunter123" target="_blank">@hunter</a>.</p>
+      </footer>
     </main>
 
+    <style>
+      /*
+      * Footer
+      */
+      .blog-footer {
+        padding: 2.5rem 0;
+        color: #999;
+        text-align: center;
+        background-color: #ffffff;
+        border-top: .05rem solid #e5e5e5;
+      }
+      .blog-footer p:last-child {
+        margin-bottom: 0;
+      }
+
+      .card {
+          box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+      }
+      
+          
+    </style>
 
 
     <!-- Optional JavaScript -->

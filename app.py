@@ -53,7 +53,7 @@ class admin(UserMixin, db.Model):
 
     def __repr__(self):
         return 'Admin : %r ' % self.Username
-
+    
 class Person(UserMixin, db.Model):
     __tablename__ = 'person'
 
@@ -122,7 +122,6 @@ class Factures(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     rel_id = db.Column(db.Integer, db.ForeignKey('relevescompteur.id'))
-
     Date_facture = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
     Montant_facture = db.Column(db.Integer, nullable=False)
     generated = db.Column(db.Boolean, nullable = False, default = False)
@@ -162,8 +161,8 @@ def deleteid(relid):
 @app.route('/')
 @app.route('/home')
 def home():
-    a = admin.query.filter_by(id=1).first()
-    return render_template('home.html', a = a)
+    
+    return redirect('adminpannel')
 
 @app.route('/adminpannel')
 @login_required
@@ -249,19 +248,22 @@ def login():
 
         return render_template('login.html')
 
-@app.route('/adminpannel/user<int:id>')
+@app.route('/adminpannel/users/<int:id>')
 @login_required
 def userProfile(id):
+    #pour le moment on suppose que chaque utilisateur a un seul compteur 
+    compteur = Compteurinfo.query.filter_by(person_id = id).first()
+    factures = Factures.query.filter_by(compteur_id = compteur.id).all()
+
     
-    return render_template('profile.html')
+    return render_template('profile.html', compteur = compteur, factures = factures)
 
     
 @app.route('/addrelev', methods=['POST', 'GET'])
 @login_required
 def addrelev():
     if request.method == 'POST':
-        a = db.session.query(Compteurinfo).all()
-        b = db.session.query(RelevesCompteur).all()
+        
         
         j = request.form['jour']
         m = request.form['mois']
@@ -277,10 +279,18 @@ def addrelev():
             flash('certainne de vos valeurs est fausse')
             return redirect('addrelev')
 
+        if x.day != 1:
+            flash('la date doit etre egale au premier du mois')
+            return redirect('addrelev')
+
+
+        a = db.session.query(Compteurinfo).all()
+        b = db.session.query(RelevesCompteur).all()
+
         if b:
             ii = RelevesCompteurDetails.query.filter_by(rel_id = b[len(b)-1].id).all()
 
-            y = RelevesCompteur.query.filter_by(id = b[len(b) - 2].id).first()
+            y = RelevesCompteur.query.filter_by(id = b[len(b) - 1].id).first()
 
             if len(ii) == len(a):
                 if y.DateActuelle >= x:
@@ -289,7 +299,7 @@ def addrelev():
                     return redirect('addrelev')
 
                 d = x - y.DateActuelle
-                rel_Mois = int(d.days/30)
+                rel_Mois = int(d.days/28)
 
                 if rel_Mois < 1:
                     flash('la duree entre les releves faut etre superieur a un mois')
@@ -422,7 +432,7 @@ def showrelev(id):
         compteurs = db.session.query(Compteurinfo).all()
         users = db.session.query(Person).all()
         factures = Factures.query.filter_by(rel_id = id).all()
-        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factures)
+        return render_template('ShowRelev.html', releve = releve, releveDet = releveDet, compteurs = compteurs, users = users, factures = factures, len = len)
 
 @app.route('/showrelev/<int:idrel>/facture/<int:idcompteur>', methods=['POST', 'GET'])
 @login_required
@@ -493,9 +503,9 @@ def updateid(idrel, idcompteur):
 @login_required
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect(url_for('login'))
     
 ######
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

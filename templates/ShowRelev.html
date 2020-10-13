@@ -25,7 +25,7 @@
             <th>Consommation Actuelle</th>
             <th>indication</th>
             <th>update</th>
-            <th>Genere la facture</th>
+            <th>Generer la facture</th>
 
         </tr>
     </thead>
@@ -47,7 +47,7 @@
                     <button type="submit" class="btn btn-primary">Generer la facture</button>
                 </form>
         {% else %}
-            <a href="/showrelev/{{ re.rel_id }}/facture/{{ re.compteur_id }}">Afficher la facture</a>
+            <a href="/showrelev/{{ re.rel_id }}/facture/{{ re.compteur_id }}" target="_blank">Afficher la facture</a>
         {% endif %}
         </td>
     </tr>
